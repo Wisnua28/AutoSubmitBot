@@ -40,12 +40,18 @@ const HEADLESS = true;
         console.log('⚠️ Tombol "I Agree" tidak ditemukan (mungkin sudah disetujui sebelumnya)');
       }
 
-      // Tunggu dan isi input wallet
-      await page.waitForSelector('input[placeholder="Enter Address"]', { timeout: 10000 });
-      await page.type('input[placeholder="Enter Address"]', address);
-      console.log('✍️  Address diisi');
+      // Tunggu dan isi input wallet menggunakan XPath
+      await page.waitForXPath("//input[@placeholder='Enter Address']", { timeout: 20000 });
+      const inputField = await page.$x("//input[@placeholder='Enter Address']");
+      if (inputField.length > 0) {
+        await inputField[0].type(address);
+        console.log('✍️ Address diisi');
+      } else {
+        console.log('❌ Input field tidak ditemukan!');
+      }
 
       // Klik tombol submit
+      await page.waitForSelector('button[type="submit"]', { timeout: 20000 });
       await page.click('button[type="submit"]');
       console.log('📨 Klik tombol Submit');
 
