@@ -20,7 +20,7 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
   // Load address dari file
   const addresses = fs.readFileSync('addresses.txt', 'utf-8').split('\n').filter(Boolean);
 
-  // Launch Chrome dari sistem
+  // Launch Chrome
   const browser = await puppeteer.launch({
     headless: HEADLESS,
     executablePath: '/usr/bin/google-chrome', // pastikan chrome sistem terinstal
@@ -34,11 +34,16 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
     try {
       await page.goto('https://exchange-airdrop.msu.io/', { waitUntil: 'networkidle2' });
 
-      // Ganti selector ini sesuai elemen input/form di website
-      await page.type('input[name="address"]', address); // contoh saja
-      await page.click('button[type="submit"]'); // contoh tombol submit
+      // Tunggu sampai input dengan id 'f' tersedia
+      await page.waitForSelector('#f', { timeout: 10000 });
 
-      // Tunggu sedikit sebelum ke address selanjutnya
+      // Isi alamat wallet
+      await page.type('#f', address);
+
+      // Tekan Enter untuk submit
+      await page.keyboard.press('Enter');
+
+      // Tunggu sebentar sebelum lanjut
       await page.waitForTimeout(3000);
     } catch (err) {
       console.error(`❌ Gagal submit ${address}:`, err.message);
@@ -48,3 +53,4 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
   await browser.close();
   console.log('✅ Selesai!');
 })();
+
