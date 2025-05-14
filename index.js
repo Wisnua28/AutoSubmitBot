@@ -2,10 +2,9 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 const fs = require('fs');
 
-const HEADLESS = true; // ubah ke false kalau ingin lihat browser
+const HEADLESS = true;
 
 (async () => {
-  // Menampilkan logo dan nama
   console.log(`
 ██╗██╗    ███╗   ██╗████████╗ ██████╗ ██████╗ ██╗
 ██║██║    ████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗██║
@@ -17,13 +16,11 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
 👤 Bot dijalankan oleh: KWONTOL
 `);
 
-  // Load address dari file
   const addresses = fs.readFileSync('addresses.txt', 'utf-8').split('\n').filter(Boolean);
 
-  // Launch Chrome
   const browser = await puppeteer.launch({
     headless: HEADLESS,
-    executablePath: '/usr/bin/google-chrome', // pastikan chrome sistem terinstal
+    executablePath: '/usr/bin/google-chrome',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
@@ -34,16 +31,16 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
     try {
       await page.goto('https://exchange-airdrop.msu.io/', { waitUntil: 'networkidle2' });
 
-      // Tunggu sampai input dengan id 'f' tersedia
-      await page.waitForSelector('#f', { timeout: 10000 });
+      // Tambah jeda agar semua elemen dimuat
+      await page.waitForTimeout(5000);
 
-      // Isi alamat wallet
-      await page.type('#f', address);
+      // Ganti dengan selector yang pasti: name="wallet_address"
+      await page.waitForSelector('input[name="wallet_address"]', { timeout: 10000 });
+      await page.type('input[name="wallet_address"]', address);
 
-      // Tekan Enter untuk submit
+      // Submit dengan tekan Enter
       await page.keyboard.press('Enter');
 
-      // Tunggu sebentar sebelum lanjut
       await page.waitForTimeout(3000);
     } catch (err) {
       console.error(`❌ Gagal submit ${address}:`, err.message);
@@ -53,4 +50,3 @@ const HEADLESS = true; // ubah ke false kalau ingin lihat browser
   await browser.close();
   console.log('✅ Selesai!');
 })();
-
