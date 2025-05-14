@@ -5,6 +5,7 @@ const puppeteer = require("puppeteer");
 const WALLET_FILE = process.env.WALLET_FILE || "addresses.txt";
 const MAX_ADDRESS = parseInt(process.env.MAX_ADDRESS || "1000");
 const DELAY_SECONDS = parseInt(process.env.DELAY_SECONDS || "5");
+const HEADLESS = process.env.HEADLESS !== "false"; // default true
 const TARGET_URL = "https://exchange-airdrop.msu.io/";
 
 async function delay(seconds) {
@@ -27,8 +28,10 @@ async function submitAddress(page, address) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
-  const page = await browser.newPage();
+  if (!fs.existsSync(WALLET_FILE)) {
+    console.error(`❌ File tidak ditemukan: ${WALLET_FILE}`);
+    process.exit(1);
+  }
 
   const addresses = fs
     .readFileSync(WALLET_FILE, "utf-8")
@@ -36,6 +39,14 @@ async function submitAddress(page, address) {
     .map(line => line.trim())
     .filter(line => line.length > 0)
     .slice(0, MAX_ADDRESS);
+
+  if (addresses.length === 0) {
+    console.error("❌ Tidak ada address untuk diproses.");
+    process.exit(1);
+  }
+
+  const browser = await puppeteer.launch({ headless: HEADLESS });
+  const page = await browser.newPage();
 
   console.log(`🚀 Mulai submit ${addresses.length} address...\n`);
 
@@ -46,3 +57,4 @@ async function submitAddress(page, address) {
   await browser.close();
   console.log("\n✅ Semua selesai!");
 })();
+
