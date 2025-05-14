@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const puppeteer = require("puppeteer");
 
+const USER_NAME = process.env.USER_NAME || "User";  // Default ke "User" jika tidak ada
 const WALLET_FILE = process.env.WALLET_FILE || "addresses.txt";
 const MAX_ADDRESS = parseInt(process.env.MAX_ADDRESS || "1000");
 const DELAY_SECONDS = parseInt(process.env.DELAY_SECONDS || "5");
@@ -49,6 +50,7 @@ async function submitAddress(page, address) {
   const page = await browser.newPage();
 
   console.log(`🚀 Mulai submit ${addresses.length} address...\n`);
+  console.log(`👤 Bot dijalankan oleh: ${USER_NAME}\n`);
 
   for (const address of addresses) {
     await submitAddress(page, address);
@@ -57,4 +59,5 @@ async function submitAddress(page, address) {
   await browser.close();
   console.log("\n✅ Semua selesai!");
 })();
+
 
