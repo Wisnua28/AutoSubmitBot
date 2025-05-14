@@ -2,7 +2,8 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 const fs = require('fs');
 
-const HEADLESS = false; // Set ke false untuk debug
+const HEADLESS = "new";
+ // Set ke false untuk debug
 
 (async () => {
   console.log(`
