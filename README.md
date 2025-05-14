@@ -7,7 +7,7 @@ Bot otomatis untuk submit wallet ke [exchange-airdrop.msu.io](https://exchange-a
 
 git clone https://github.com/Wisnua28/AutoSubmitBot.git
 
-cd AutoSubmitBot-MSU
+cd AutoSubmitBot
 
 Edit .env
 
