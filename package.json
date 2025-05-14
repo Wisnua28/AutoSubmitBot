@@ -1,7 +1,7 @@
 {
   "name": "autosubmitbot-msu",
   "version": "1.0.0",
-  "description": "Auto wallet submit bot for MSU Airdrop",
+  "description": "Bot submit address untuk MSU Airdrop",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
