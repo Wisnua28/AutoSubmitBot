@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 require('dotenv').config();
 const fs = require('fs');
 
-const HEADLESS = true;
+const HEADLESS = false; // Set ke false untuk debug
 
 (async () => {
   console.log(`
@@ -31,14 +31,20 @@ const HEADLESS = true;
     try {
       await page.goto('https://exchange-airdrop.msu.io/', { waitUntil: 'networkidle2' });
 
-      // Tambah jeda agar semua elemen dimuat
-      await page.waitForTimeout(5000);
+      // Tunggu modal terms & klik "I agree"
+      try {
+        await page.waitForSelector('button:has-text("I Agree")', { timeout: 5000 });
+        await page.click('button:has-text("I Agree")');
+        console.log('✅ Klik tombol I Agree');
+      } catch (e) {
+        console.log('⚠️ Tombol I Agree tidak ditemukan (mungkin sudah disetujui sebelumnya)');
+      }
 
-      // Ganti dengan selector yang pasti: name="wallet_address"
-      await page.waitForSelector('input[name="wallet_address"]', { timeout: 10000 });
-      await page.type('input[name="wallet_address"]', address);
+      // Tunggu input muncul
+      await page.waitForSelector('input#f', { timeout: 10000 });
+      await page.type('input#f', address);
 
-      // Submit dengan tekan Enter
+      // Tekan Enter (submit)
       await page.keyboard.press('Enter');
 
       await page.waitForTimeout(3000);
