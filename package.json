@@ -1,0 +1,15 @@
+{
+  "name": "autosubmitbot-msu",
+  "version": "1.0.0",
+  "description": "Auto wallet submit bot for MSU Airdrop",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "puppeteer": "^21.0.0"
+  },
+  "author": "YourName",
+  "license": "MIT"
+}
