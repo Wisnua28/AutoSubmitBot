@@ -29,6 +29,18 @@ async function submitAddress(page, address) {
 }
 
 (async () => {
+  // Logo ASCII KWONTOL
+  console.log(`
+██╗██╗    ███╗   ██╗████████╗ ██████╗ ██████╗ ██╗
+██║██║    ████╗  ██║╚══██╔══╝██╔══██╗██╔══██╗██║
+██║██║    ██╔██╗ ██║   ██║   ██████╔╝██║  ██║██║
+██║██║    ██║╚██╗██║   ██║   ██╔══██╗██║  ██║██║
+██║██████╗██║ ╚████║   ██║   ██████╔╝██████╔╝███████╗
+╚═╝╚═════╝╚═╝  ╚══╝   ╚═╝   ╚═════╝ ╚═════╝ ╚══════╝
+`);
+
+  console.log(`👤 Bot dijalankan oleh: ${USER_NAME}\n`);
+
   if (!fs.existsSync(WALLET_FILE)) {
     console.error(`❌ File tidak ditemukan: ${WALLET_FILE}`);
     process.exit(1);
@@ -50,7 +62,6 @@ async function submitAddress(page, address) {
   const page = await browser.newPage();
 
   console.log(`🚀 Mulai submit ${addresses.length} address...\n`);
-  console.log(`👤 Bot dijalankan oleh: ${USER_NAME}\n`);
 
   for (const address of addresses) {
     await submitAddress(page, address);
@@ -59,5 +70,3 @@ async function submitAddress(page, address) {
   await browser.close();
   console.log("\n✅ Semua selesai!");
 })();
-
-
